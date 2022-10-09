@@ -1,83 +1,77 @@
+" ========= General settings ==========
 syntax enable
-
 set directory=$HOME/.vim/swap//
-set exrc                   
+set exrc
 set relativenumber
 set nu
 set hidden
 set noerrorbells
-set tabstop=4 softtabstop=4  
+set tabstop=4 softtabstop=4
 set shiftwidth=4
 set expandtab
 set smartindent
-set nowrap  
+set nowrap
 set incsearch
 set scrolloff=8
 set colorcolumn=80
 set signcolumn=yes
 set encoding=UTF-8
-  
-call plug#begin('~/.vim/plugged') 
+set updatetime=100 " Remove lag for vim-gitgutter
+
+" ========= Install Plugins ==========
+call plug#begin('~/.vim/plugged')
+Plug 'gruvbox-community/gruvbox' " Color theme
+" Syntax highlighting configuration [[
+Plug 'ntpeters/vim-better-whitespace' " Trailing whitespace automatic fixing
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_global_extensions = [
-    \'coc-emmet', 
-    \'coc-tsserver', 
-    \'coc-css', 
-    \'coc-html', 
-    \'coc-json', 
-    \'coc-prettier', 
-    \'coc-snippets',
-    \'coc-tslint-plugin', 
-    \'coc-svg', 
-    \'coc-sql', 
-    \'coc-docker', 
-    \'coc-pyright', 
-    \'coc-powershell', 
+    \'coc-emmet',
+    \'coc-tsserver',
+    \'coc-css',
+    \'coc-html',
+    \'coc-json',
+    \'coc-sql',
+    \'coc-docker',
 \] "list of CoC extensions needed
-Plug 'nvim-lua/popup.nvim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzy-native.nvim'
-Plug 'gruvbox-community/gruvbox'
-Plug 'scrooloose/nerdtree'
-Plug 'scrooloose/nerdcommenter'
-Plug 'vim-airline/vim-airline'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'mileszs/ack.vim'
-Plug 'easymotion/vim-easymotion'
+Plug 'yuezk/vim-js' " JS syntax highlighting
+Plug 'maxmellon/vim-jsx-pretty' " JSX syntax highlighting
+Plug 'chr4/nginx.vim' " Syntax highlighting for nginx
+" ]]
+" Icons settings. Note set compatible font in terminal like Hack Nerd [[
 Plug 'ryanoasis/vim-devicons'
-Plug 'tpope/vim-fugitive'
-let $FZF_DEFAULT_COMMAND = 'ag -g ""'
-Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'jiangmiao/auto-pairs'
-Plug 'yuezk/vim-js'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'pangloss/vim-javascript'
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-Plug 'davidhalter/jedi-vim'
-Plug 'zchee/deoplete-jedi'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'christoomey/vim-tmux-navigator'
-let g:deoplete#enable_at_startup = 1
-call plug#end() 
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" ]]
+Plug 'frazrepo/vim-rainbow' " Brack color
+Plug 'scrooloose/nerdtree' " File navigation
+Plug 'scrooloose/nerdcommenter' " Code comment
+Plug 'easymotion/vim-easymotion' " Search text in file
+Plug 'tpope/vim-fugitive' " Let you run git commands
+Plug 'christoomey/vim-tmux-navigator' " Navigation between tmux and vim
+Plug 'airblade/vim-gitgutter' " Display line changed in file
+call plug#end()
 
-colorscheme gruvbox
-highlight Normal guibg=none
-
-let mapleader = " "
+" =============== Key binding ==============
+let mapleader = " " " Leader settings
 nnoremap <leader>s :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
-
+" Nerdtree settings [[
+nnoremap <leader>ft :NERDTreeToggle<CR>
+" ]]
+" Commenting settings [[
+vmap <leader>cc <plug>NERDCommenterToggle
+vmap <leader>ci <plug>NERDCommenterInvert
+" ]]
 nnoremap <leader>vs <cmd>vsplit<cr>
 nnoremap <leader>hs <cmd>split<cr>
-nnoremap <leader>ft :NERDTreeToggle<CR>
-
-vmap <leader>cc <plug>NERDCommenterToggle
-
 imap jj <Esc>
-
 nmap <silent>gd <Plug>(coc-definition)
 vmap <leader>fs  <Plug>(coc-format-selected)-
+
+"================= Pluggins configuration ================
+colorscheme gruvbox
+highlight Normal guibg=none
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+let g:jsx_ext_required = 0 " Highlight jsx syntax even in non .jsx files vim-jsx
+let g:deoplete#enable_at_startup = 1
+let NERDTreeIgnore = ['\.pyc$']
+let g:rainbow_active = 1
