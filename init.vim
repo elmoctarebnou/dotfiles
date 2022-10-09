@@ -32,6 +32,7 @@ let g:coc_global_extensions = [
     \'coc-json',
     \'coc-sql',
     \'coc-docker',
+    \'coc-eslint',
 \] "list of CoC extensions needed
 Plug 'yuezk/vim-js' " JS syntax highlighting
 Plug 'maxmellon/vim-jsx-pretty' " JSX syntax highlighting
@@ -41,6 +42,8 @@ Plug 'chr4/nginx.vim' " Syntax highlighting for nginx
 Plug 'ryanoasis/vim-devicons'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 " ]]
+" Install then load plugin only for editing supported files
+Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
 Plug 'frazrepo/vim-rainbow' " Brack color
 Plug 'scrooloose/nerdtree' " File navigation
 Plug 'scrooloose/nerdcommenter' " Code comment
@@ -48,6 +51,12 @@ Plug 'easymotion/vim-easymotion' " Search text in file
 Plug 'tpope/vim-fugitive' " Let you run git commands
 Plug 'christoomey/vim-tmux-navigator' " Navigation between tmux and vim
 Plug 'airblade/vim-gitgutter' " Display line changed in file
+" Telescope file search required plugins [[
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzy-native.nvim'
+" ]]
 call plug#end()
 
 " =============== Key binding ==============
@@ -65,7 +74,8 @@ nnoremap <leader>vs <cmd>vsplit<cr>
 nnoremap <leader>hs <cmd>split<cr>
 imap jj <Esc>
 nmap <silent>gd <Plug>(coc-definition)
-vmap <leader>fs  <Plug>(coc-format-selected)-
+" Map prettier command
+nnoremap <leader>p :Prettier<CR>
 
 "================= Pluggins configuration ================
 colorscheme gruvbox
