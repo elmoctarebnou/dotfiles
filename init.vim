@@ -33,10 +33,12 @@ let g:coc_global_extensions = [
     \'coc-sql',
     \'coc-docker',
     \'coc-eslint',
+    \'coc-pyright',
 \] "list of CoC extensions needed
 Plug 'yuezk/vim-js' " JS syntax highlighting
 Plug 'maxmellon/vim-jsx-pretty' " JSX syntax highlighting
 Plug 'chr4/nginx.vim' " Syntax highlighting for nginx
+Plug 'vim-scripts/indentpython.vim' " Auto indentation for python
 " ]]
 " Icons settings. Note set compatible font in terminal like Hack Nerd [[
 Plug 'ryanoasis/vim-devicons'
@@ -44,11 +46,11 @@ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 " ]]
 " Install then load plugin only for editing supported files
 Plug 'prettier/vim-prettier', { 'do': 'yarn install --frozen-lockfile --production' }
-Plug 'frazrepo/vim-rainbow' " Brack color
+Plug 'frazrepo/vim-rainbow' " Bracket color
 Plug 'scrooloose/nerdtree' " File navigation
 Plug 'scrooloose/nerdcommenter' " Code comment
 Plug 'easymotion/vim-easymotion' " Search text in file
-Plug 'tpope/vim-fugitive' " Let you run git commands
+Plug 'tpope/vim-fugitive' " Let you run git commands from vim
 Plug 'christoomey/vim-tmux-navigator' " Navigation between tmux and vim
 Plug 'airblade/vim-gitgutter' " Display line changed in file
 " Telescope file search required plugins [[
@@ -85,3 +87,5 @@ let g:jsx_ext_required = 0 " Highlight jsx syntax even in non .jsx files vim-jsx
 let g:deoplete#enable_at_startup = 1
 let NERDTreeIgnore = ['\.pyc$']
 let g:rainbow_active = 1
+let python_highlight_all=1 " Python default syntax highlighting enable
+syntax on
