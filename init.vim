@@ -16,6 +16,7 @@ set scrolloff=8
 set colorcolumn=80
 set signcolumn=yes
 set encoding=UTF-8
+set nohlsearch!
 set updatetime=100 " Remove lag for vim-gitgutter
 
 " ========= Install Plugins ==========
@@ -77,7 +78,12 @@ nnoremap <leader>hs <cmd>split<cr>
 imap jj <Esc>
 nmap <silent>gd <Plug>(coc-definition)
 " Map prettier command
-nnoremap <leader>p :Prettier<CR>
+nnoremap <leader>p :Prettier<cr>
+" Toggle search highlighting
+nnoremap <leader>h :set hlsearch!<cr>
+" Map block fast movement
+nnoremap t <C-u>
+nnoremap b <C-d>
 
 "================= Pluggins configuration ================
 colorscheme gruvbox
