@@ -21,7 +21,9 @@ set updatetime=100 " Remove lag for vim-gitgutter
 
 " ========= Install Plugins ==========
 call plug#begin('~/.vim/plugged')
+
 Plug 'gruvbox-community/gruvbox' " Color theme
+Plug 'lukas-reineke/indent-blankline.nvim' " Indent
 " Syntax highlighting configuration [[
 Plug 'ntpeters/vim-better-whitespace' " Trailing whitespace automatic fixing
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -59,12 +61,16 @@ Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
+" Python cell execution [[
+Plug 'benmills/vimux'
+Plug 'greghor/vim-pyShell'
+Plug 'julienr/vim-cellmode'
 " ]]
 call plug#end()
 
 " =============== Key binding ==============
 let mapleader = " " " Leader settings
-nnoremap <leader>s :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
+nnoremap <leader>sw :lua require('telescope.builtin').grep_string({ search = vim.fn.input("Grep For > ")})<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 " Nerdtree settings [[
 nnoremap <leader>ft :NERDTreeToggle<CR>
@@ -81,9 +87,18 @@ nmap <silent>gd <Plug>(coc-definition)
 nnoremap <leader>p :Prettier<cr>
 " Toggle search highlighting
 nnoremap <leader>h :set hlsearch!<cr>
-" Map block fast movement
+" Map block fast movement [[
 nnoremap t <C-u>
 nnoremap b <C-d>
+"]]
+" ipython shell [[
+noremap <leader>ss :call StartPyShell()<CR>
+noremap <leader>sk :call StopPyShell()<CR>
+" code execution
+nnoremap <leader>el :call PyShellSendLine()<CR>
+nnoremap <leader>ec :call RunTmuxPythonCell(0)<CR>
+nnoremap <leader>ea :call RunTmuxPythonAllCellsAbove()<CR>
+"]]
 
 "================= Pluggins configuration ================
 colorscheme gruvbox
@@ -95,3 +110,10 @@ let NERDTreeIgnore = ['\.pyc$']
 let g:rainbow_active = 1
 let python_highlight_all=1 " Python default syntax highlighting enable
 syntax on
+" Vim cell send settings [[
+let g:vim_bootstrap_langs = "python"
+let g:vim_bootstrap_editor = "nvim"
+filetype plugin indent on " Required
+let g:cellmode_use_tmux=1
+let g:cellmode_tmux_panenumber=1
+" ]]
