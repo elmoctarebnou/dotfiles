@@ -64,7 +64,11 @@ Plug 'nvim-telescope/telescope-fzy-native.nvim'
 " Python cell execution [[
 Plug 'benmills/vimux'
 Plug 'greghor/vim-pyShell'
+let g:cellmode_default_mappings='0'
 Plug 'julienr/vim-cellmode'
+" Vim ipython
+Plug 'jpalardy/vim-slime', { 'for': 'python' }
+Plug 'hanschen/vim-ipython-cell', { 'for': 'python' }
 " ]]
 call plug#end()
 
@@ -91,13 +95,13 @@ nnoremap <leader>h :set hlsearch!<cr>
 nnoremap t <C-u>
 nnoremap b <C-d>
 "]]
-" ipython shell [[
-noremap <leader>ss :call StartPyShell()<CR>
-noremap <leader>sk :call StopPyShell()<CR>
-" code execution
-nnoremap <leader>el :call PyShellSendLine()<CR>
-nnoremap <leader>ec :call RunTmuxPythonCell(0)<CR>
-nnoremap <leader>ea :call RunTmuxPythonAllCellsAbove()<CR>
+" ipython cell running with vim-slime [[
+let g:slime_target = "tmux"
+let g:slime_default_config = {"socket_name": "default", "target_pane": "{last}"}
+nnoremap <Leader>ss :SlimeSend1 ipython<CR>
+nnoremap <Leader>sr :IPythonCellRestart<CR>
+nnoremap <Leader>r :IPythonCellRun<CR>
+nnoremap <Leader>sc :IPythonCellClear<CR>
 "]]
 
 "================= Pluggins configuration ================
