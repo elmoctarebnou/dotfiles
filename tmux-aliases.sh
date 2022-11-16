@@ -1,4 +1,4 @@
-# Some tmux-related shell aliases
+##### Add alias to ~/.bashrc #######
 
 # Attaches tmux to the last session; creates a new session if none exists.
 alias t='tmux attach || tmux new-session'
