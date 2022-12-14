@@ -92,8 +92,8 @@ nnoremap <leader>p :Prettier<cr>
 " Toggle search highlighting
 nnoremap <leader>h :set hlsearch!<cr>
 " Map block fast movement [[
-nnoremap t <C-u>
-nnoremap b <C-d>
+nnoremap ("<C-u>", "<C-u>zz")
+nnoremap("<C-d>", "<C-d>zz")
 "]]
 " ipython cell running with vim-slime [[
 let g:slime_target = "tmux"
