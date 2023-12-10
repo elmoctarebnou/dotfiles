@@ -1,117 +1,65 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
+######## Path exports ########
+export PATH=$HOME/bin:/usr/local/bin:$PATH
+# Home brew alias
+export PATH=/opt/homebrew/bin:$PATH
+# Rust Cargo
+export PATH="$HOME/.cargo/bin:$PATH"
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+# Lvim
+export PATH="$HOME/.local/bin:$PATH"
+# Vs code
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel9k/powerlevel9k"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git dnf pass docker)
-
+######## Sourcing ############
 source $ZSH/oh-my-zsh.sh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+##############################
+# Oh my zsh plugins
+plugins=(
+  git
+  zsh-completions
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+)
 
-# User configuration
+####### Alias ############
+# get machine's ip address
+alias ip="ipconfig getifaddr en0"
+# edit global zsh configuration
+alias zshconfig="code ~/.zshrc"
+# reload zsh configuration
+alias zshsource="source ~/.zshrc"
+# reload zsh configuration
+alias ohmyzsh="cd ~/.oh-my-zsh"
+# navigate to global ssh directory
+alias sshhome="cd ~/.ssh"
+# edit global ssh configuration
+alias sshconfig="code ~/.ssh/config"
+# edit global git configuration
+alias gitconfig="code ~/.gitconfig"
+# git aliases
+alias gits="git status"
+alias gitd="git diff"
+alias gitl="git lg"
+alias gita="git add ."
+alias gitc="cz commit"
+# python alias
+alias python=python3
+# Lvim alias
+alias vi=lvim
 
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-#
-#{{
-# tat: tmux attach
+# tmux alias
 function tat {
-  name=$(basename `pwd` | sed -e 's/\.//g')
-
-  if tmux ls 2>&1 | grep "$name"; then
-    tmux attach -t "$name"
-  elif [ -f .envrc ]; then
-    direnv exec / tmux new-session -s "$name"
-  else
-    tmux new-session -s "$name"
-  fi
+  cd ~/
+  sh tmux-session-setup.sh
+  tmux attach -t "$name"
 }
-#}}
-export PATH=~/bin:$PATH
+
+
+
+# load zsh-completions
+autoload -U compinit && compinit
+
+# Use starship theme (needs to be at the end)
+eval "$(starship init zsh)"
