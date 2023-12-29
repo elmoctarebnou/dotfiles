@@ -8,8 +8,6 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
 # Lvim
 export PATH="$HOME/.local/bin:$PATH"
-# Vs code
-export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
 
 ######## Sourcing ############
 source $ZSH/oh-my-zsh.sh
@@ -46,8 +44,11 @@ alias gita="git add ."
 alias gitc="cz commit"
 # python alias
 alias python=python3
+alias pip=pip3
 # Lvim alias
 alias vi=lvim
+# Alias list objects
+alias ls='ls -al'
 
 # tmux alias
 function tat {
@@ -55,11 +56,13 @@ function tat {
   sh tmux-session-setup.sh
   tmux attach -t "$name"
 }
-
-
+alias tmuxsource='tmux source-file ~/.tmux.conf'
 
 # load zsh-completions
 autoload -U compinit && compinit
 
 # Use starship theme (needs to be at the end)
 eval "$(starship init zsh)"
+
+# Added by Amplify CLI binary installer
+export PATH="$HOME/.amplify/bin:$PATH"

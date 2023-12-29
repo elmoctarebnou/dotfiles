@@ -6,11 +6,10 @@ if [ "$(tmux list-sessions 2> /dev/null | grep -o $SESSION)" != "$SESSION" ]; th
   # Create session 
   tmux new-session -d -s $SESSION
   # Rename auto created window and create other windows 
-  tmux rename-window -t $SESSION:1 'frontend'
-  tmux new-window -t $SESSION:2 -n 'backend' "$SHELL"
-  tmux new-window -t $SESSION:3 -n 'aws' "$SHELL"
+  tmux rename-window -t $SESSION:1 'main'
+  tmux new-window -t $SESSION:2 -n 'frontend' "$SHELL"
+  tmux new-window -t $SESSION:3 -n 'backend' "$SHELL"
   tmux new-window -t $SESSION:4 -n 'notes' "$SHELL"
-  tmux new-window -t $SESSION:5 -n 'other' "$SHELL"
  
 else
   tmux attach -t $SESSION
