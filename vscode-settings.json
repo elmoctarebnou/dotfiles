@@ -1,9 +1,15 @@
 {
+	"vim.leader": "<space>",
 	"vim.easymotion": true,
 	"vim.incsearch": true,
 	"vim.useSystemClipboard": true,
 	"vim.useCtrlKeys": false,
 	"vim.hlsearch": true,
+	"vim.handleKeys": {
+		"<C-a>": false,
+		"<C-f>": false,
+		"<C-p>": false
+	},
 	"vim.insertModeKeyBindings": [
 		{
 			"before": ["j", "j"],
@@ -18,10 +24,6 @@
 		{
 			"before": ["<leader>", "vs"],
 			"commands": ["workbench.action.splitEditor"]
-		},
-		{
-			"before": ["<leader>", "r", "f"],
-			"commands": ["fileutils.renameFile"]
 		},
 		{
 			"before": ["<leader>", "e"],
@@ -60,10 +62,20 @@
 			"before": ["leader", "l"],
 			"commands": ["workbench.action.focusRightGroup"]
 		},
-
+		// File save
 		{ "before": ["leader", "w"], "commands": [":w!"] },
 		{ "before": ["leader", "q"], "commands": [":q!"] },
-		{ "before": ["leader", "x"], "commands": [":x!"] }
+		{ "before": ["leader", "x"], "commands": [":x!"] },
+		/* move line up */
+		{
+			"before": ["<leader>", "u"],
+			"commands": ["editor.action.moveLinesUpAction"]
+		},
+		/* move line down */
+		{
+			"before": ["<leader>", "d"],
+			"commands": ["editor.action.moveLinesDownAction"]
+		}
 	],
 	"vim.normalModeKeyBindings": [
 		{
@@ -74,8 +86,44 @@
 			"before": ["K"],
 			"after": ["5", "k", "z", "z"]
 		},
+		{
+			"before": ["<leader>", "a"],
+			"commands": ["workbench.view.explorer"]
+		},
+		{
+			"before": ["g", "p", "d"],
+			"commands": ["editor.action.peekDefinition"]
+		},
+		{
+			"before": ["g", "h"],
+			"commands": ["editor.action.showDefinitionPreviewHover"]
+		},
+		{
+			"before": ["g", "i"],
+			"commands": ["editor.action.goToImplementation"]
+		},
+		{
+			"before": ["g", "p", "i"],
+			"commands": ["editor.action.peekImplementation"]
+		},
+		{
+			"before": ["q", "f"],
+			"commands": ["editor.action.quickFix"]
+		},
+		{
+			"before": ["s", "r"],
+			"commands": ["editor.action.referenceSearch.trigger"]
+		}
 	],
 	"vim.visualModeKeyBindings": [
+		{
+			"before": ["J"],
+			"after": ["5", "j", "z", "z"]
+		},
+		{
+			"before": ["K"],
+			"after": ["5", "k", "z", "z"]
+		},
 		{
 			"before": [">"],
 			"commands": ["editor.action.indentLines"]
@@ -84,20 +132,12 @@
 			"before": ["<"],
 			"commands": ["editor.action.outdentLines"]
 		},
+		// Commenting
 		{
 			"before": ["<leader>", "c", "c"],
 			"commands": ["editor.action.commentLine"]
-		},
-		{
-			"before": ["<leader>", "c", "u"],
-			"commands": ["editor.action.blockcomment"]
 		}
 	],
-	"vim.leader": "<space>",
-	"vim.handleKeys": {
-		"<C-a>": false,
-		"<C-f>": false
-	},
 	"workbench.colorTheme": "Default Dark+",
 	"workbench.editorAssociations": {
 		"*.ipynb": "jupyter-notebook"
@@ -190,6 +230,6 @@
 	"jupyter.interactiveWindow.creationMode": "single",
 	"editor.inlineSuggest.enabled": true,
 	"githubPullRequests.pullBranch": "never",
-	"remote.autoForwardPorts": false,
-	"powermode.shake.intensity": 0
+	"remote.autoForwardPorts": false
 }
+
