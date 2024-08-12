@@ -64,7 +64,10 @@ return packer.startup(function(use)
   use "lvimuser/lsp-inlayhints.nvim"
   use "simrat39/inlay-hints.nvim"
   use "https://git.sr.ht/~whynothugo/lsp_lines.nvim"
-
+  -- Toggleterm
+  use {"akinsho/toggleterm.nvim", tag = '*', config = function()
+    require("toggleterm").setup()
+  end}
   -- Completion
   use "christianchiarulli/nvim-cmp"
   use "hrsh7th/cmp-buffer" -- buffer completions

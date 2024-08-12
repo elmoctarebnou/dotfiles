@@ -1,4 +1,7 @@
+
+
 M = {}
+
 local status_ok, _ = pcall(require, "lspconfig")
 if not status_ok then
   return
@@ -24,6 +27,7 @@ M.server_capabilities = function()
   end)
 end
 
+require("elmoctarebnou.toggleterm")
 require "elmoctarebnou.lsp.lsp-signature"
 require("elmoctarebnou.lsp.mason")
 require("elmoctarebnou.lsp.handlers").setup()
