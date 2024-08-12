@@ -1,3 +1,27 @@
+###########################
+# Required Packages/Tools #
+###########################
+# - Zsh: Mac OS default shell.
+# - Homebrew: A package manager for macOS/Linux that simplifies the installation of software.
+# - Oh My Zsh: A framework for managing your Zsh configuration with themes and plugins.
+# - Neovim: Required for LunarVim.
+# - LunarVim: An IDE layer for Neovim, providing enhanced editing features.
+# - Starship Prompt: A customizable, fast prompt for your terminal.
+# - Powerlevel10k: A Zsh theme.
+# - fzf: A command-line fuzzy finder that helps quickly locate files, directories, and command history.
+# - AWS CLI & AWS Vault: Tools for managing AWS services and securely handling AWS credentials.
+# - Rust & Cargo
+# - zsh-completions (Oh My Zsh plugin): Provides additional completion definitions for Zsh.
+# - zsh-autosuggestions (Oh My Zsh plugin): Suggests commands as you type based on your command history.
+# - zsh-syntax-highlighting (Oh My Zsh plugin): Highlights commands as you type to indicate syntax correctness.
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+
 ################
 # Path Exports #
 ################
@@ -19,21 +43,20 @@ export PATH="$HOME/.amplify/bin:$PATH"
 # PostgreSQL
 export PATH="/Library/PostgreSQL/14/bin:$PATH"
 
-###########################################
-# Psycopg2 Setup is this actually needed? #
-###########################################
-export LDFLAGS="-L/opt/homebrew/opt/libpq/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/libpq/include"
-export PKG_CONFIG_PATH="/opt/homebrew/opt/libpq/lib/pkgconfig"
+#############
+# Variables #
+#############
+ZSH_THEME="powerlevel10k/powerlevel10k" # Need to be before sourcing oh-my-zsh.sh
 
 ############
 # Sourcing #
 ############
 source $ZSH/oh-my-zsh.sh
 
-##############
+
+###########
 # Aliases #
-##############
+###########
 alias zshsource="source ~/.zshrc"
 alias tmuxsource='tmux source-file ~/.tmux.conf'
 alias vi=lvim
@@ -72,6 +95,11 @@ gcmt() {
     git commit -m "$*"
   fi
 }
+# Git add and commit with message
+gac() {
+  git add .
+  gcmt "$*"
+}
 # Git checkout with fzf
 gcout() {
   echo "Creating a new branch..."
@@ -103,13 +131,13 @@ function tat {
   tmux attach -t $name
 }
 # Fuzzy Finder for Files
-function ffind() {
+function sd() {
   local dir="${1:-.}"
   local file
   file=$(find "$dir" -type f -o -type d 2>/dev/null | fzf --height 40% --border --preview '[[ -f {} ]] && bat --style=numbers --color=always {} || ls -alh {}')
   if [[ -n $file ]]; then
     if [[ -f $file ]]; then
-      ${EDITOR:-vi} "$file"
+      ${EDITOR:-lvim} "$file"
     else
       cd "$file" || return
     fi
@@ -147,5 +175,8 @@ plugins=(
 # Load zsh-completions
 autoload -U compinit && compinit
 
-# Use starship theme (needs to be at the end)
+# Use starship to init zsh instead of oh-my-zsh
 eval "$(starship init zsh)"
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
