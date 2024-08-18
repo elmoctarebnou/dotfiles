@@ -10,7 +10,7 @@
 # - Powerlevel10k: A Zsh theme.
 # - fzf: A command-line fuzzy finder that helps quickly locate files, directories, and command history.
 # - AWS CLI & AWS Vault: Tools for managing AWS services and securely handling AWS credentials.
-# - Rust & Cargo
+# - Rust & Cargo.
 # - zsh-completions (Oh My Zsh plugin): Provides additional completion definitions for Zsh.
 # - zsh-autosuggestions (Oh My Zsh plugin): Suggests commands as you type based on your command history.
 # - zsh-syntax-highlighting (Oh My Zsh plugin): Highlights commands as you type to indicate syntax correctness.
@@ -58,6 +58,7 @@ source $ZSH/oh-my-zsh.sh
 alias zshsource="source ~/.zshrc"
 alias tmuxsource='tmux source-file ~/.tmux.conf'
 alias vi=lvim
+alias vimconfig="vi /Users/elmoctarebnou/.config/lvim/lua/elmoctarebnou"
 alias ip="ipconfig getifaddr en0"
 alias zshconfig="vi ~/.zshrc"
 alias ohmyzsh="cd ~/.oh-my-zsh"
@@ -108,6 +109,19 @@ gcout() {
   branch=$(git branch --format='%(refname:short)' | fzf --height 10 --border --prompt="Select a branch: ")
   if [[ -n $branch ]]; then
     git checkout "$branch"
+  else
+    echo "No branch selected."
+  fi
+}
+# Git search branches without checking out
+gsb() {
+  if ! command -v fzf &> /dev/null; then
+    echo "fzf is not installed. Please install it first."
+    return 1
+  fi
+  branch=$(git branch --format='%(refname:short)' | fzf --height 10 --border --prompt="Select a branch: ")
+  if [[ -n $branch ]]; then
+    echo "Branch selected: $branch"
   else
     echo "No branch selected."
   fi

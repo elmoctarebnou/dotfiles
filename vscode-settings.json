@@ -1,3 +1,4 @@
+
 {
 	"vim.leader": "<space>",
 	"vim.easymotion": true,
@@ -8,7 +9,9 @@
 	"vim.handleKeys": {
 		"<C-a>": false,
 		"<C-f>": false,
-		"<C-p>": false
+		"<C-p>": false,
+		"<C-c>": false,
+		"<C-v>": false
 	},
 	"vim.insertModeKeyBindings": [
 		{
@@ -17,10 +20,14 @@
 		}
 	],
 	"vim.normalModeKeyBindingsNonRecursive": [
+		// File save and quit
+		{ "before": ["<leader>", "w"], "commands": [":w!"] },
+		{ "before": ["<leader>", "q"], "commands": [":q!"] },
 		{
 			"before": ["<Leader>", "/"],
 			"commands": [":noh"]
 		},
+		// Navigation
 		{
 			"before": ["<leader>", "vs"],
 			"commands": ["workbench.action.splitEditor"]
@@ -30,100 +37,121 @@
 			"commands": ["workbench.action.toggleSidebarVisibility"]
 		},
 		{
-			"before": ["<Leader>", "p"],
+			"before": ["<leader>", "a"],
+			"commands": ["workbench.view.explorer"]
+		},
+		/* Text selection */
+		// New keybindings for selecting to the left and right
+		{
+			"before": ["<leader>", "l"], // or any other unassigned key combination
+			"commands": ["editor.action.selectToEndOfLine"]
+		},
+		{
+			"before": ["<leader>", "h"], // or any other unassigned key combination
+			"commands": ["editor.action.selectToBeginningOfLine"]
+		},
+		/* Mapping vim yanking to use vscode*/
+		{
+			"before": ["y"],
+			"commands": ["editor.action.clipboardCopyAction"],
+			"when": "textInputFocus"
+		},
+		{
+			"before": ["p"],
+			"commands": ["editor.action.clipboardPasteAction"],
+			"when": "textInputFocus && !editorReadonly"
+		},
+		{
+			"before": ["<leader>", "p"],
 			"commands": ["workbench.action.showCommands"]
 		},
 		{
-			"before": ["<Leader>", "t"],
-			"commands": ["workbench.action.gotoSymbol"]
-		},
-		{
-			"before": ["<Leader>", "c", "c"],
-			"commands": ["editor.action.commentLine"]
-		},
-		{
-			"before": ["<leader>", "c", "u"],
-			"commands": ["editor.action.blockcomment"]
-		},
-		// panes
-		{
-			"before": ["leader", "h"],
-			"commands": ["workbench.action.focusLeftGroup"]
-		},
-		{
-			"before": ["leader", "j"],
-			"commands": ["workbench.action.focusBelowGroup"]
-		},
-		{
-			"before": ["leader", "k"],
-			"commands": ["workbench.action.focusAboveGroup"]
-		},
-		{
-			"before": ["leader", "l"],
-			"commands": ["workbench.action.focusRightGroup"]
-		},
-		// File save
-		{ "before": ["leader", "w"], "commands": [":w!"] },
-		{ "before": ["leader", "q"], "commands": [":q!"] },
-		{ "before": ["leader", "x"], "commands": [":x!"] },
-		/* move line up */
-		{
-			"before": ["<leader>", "u"],
-			"commands": ["editor.action.moveLinesUpAction"]
-		},
-		/* move line down */
-		{
-			"before": ["<leader>", "d"],
-			"commands": ["editor.action.moveLinesDownAction"]
+			"before": ["<leader>", "f", "h"],
+			"commands": ["extension.git-file-history"]
 		}
 	],
 	"vim.normalModeKeyBindings": [
 		{
-			"before": ["J"],
-			"after": ["5", "j", "z", "z"]
+			"before": ["<leader>", "l"],
+			"commands": ["workbench.action.nextEditor"],
+			"when": "!vim.activeVisualMode"
 		},
 		{
-			"before": ["K"],
-			"after": ["5", "k", "z", "z"]
+			"before": ["<leader>", "h"],
+			"commands": ["workbench.action.previousEditor"],
+			"when": "!vim.activeVisualMode"
+		},
+		/********************/
+		/* Search bindings */
+		/********************/
+		{
+			"before": ["<leader>", "s", "r"],
+			"commands": ["editor.action.referenceSearch.trigger"]
 		},
 		{
-			"before": ["<leader>", "a"],
-			"commands": ["workbench.view.explorer"]
+			"before": ["<leader>", "s", "d"],
+			"commands": ["workbench.action.quickOpen"]
 		},
 		{
-			"before": ["g", "p", "d"],
-			"commands": ["editor.action.peekDefinition"]
+			"before": ["<leader>", "s", "t"],
+			"commands": ["workbench.action.findInFiles"]
 		},
+		// Definition mappings
 		{
-			"before": ["g", "h"],
+			"before": ["<leader>", "i"],
 			"commands": ["editor.action.showDefinitionPreviewHover"]
 		},
 		{
-			"before": ["g", "i"],
-			"commands": ["editor.action.goToImplementation"]
+			"before": ["<leader>", "p", "d"],
+			"commands": ["editor.action.previewDeclaration"]
 		},
+		// Commenting when in normal mode
 		{
-			"before": ["g", "p", "i"],
-			"commands": ["editor.action.peekImplementation"]
+			"before": ["<leader>", "c", "c"],
+			"commands": ["editor.action.commentLine"]
 		},
-		{
-			"before": ["q", "f"],
-			"commands": ["editor.action.quickFix"]
-		},
-		{
-			"before": ["s", "r"],
-			"commands": ["editor.action.referenceSearch.trigger"]
-		}
-	],
-	"vim.visualModeKeyBindings": [
+		// Fast movement
 		{
 			"before": ["J"],
-			"after": ["5", "j", "z", "z"]
+			"after": ["7", "j", "z", "z"]
 		},
 		{
 			"before": ["K"],
-			"after": ["5", "k", "z", "z"]
+			"after": ["7", "k", "z", "z"]
 		},
+		{
+			"before": ["L"],
+			"after": ["7", "l"]
+		},
+		{
+			"before": ["H"],
+			"after": ["7", "h"]
+		}
+	],
+	"vim.visualModeKeyBindings": [
+		// Google search highlighted text
+		{
+			"before": ["<leader>", "s", "g"],
+			"commands": ["extension.googleSearch"]
+		},
+		// Fast selection
+		{
+			"before": ["J"],
+			"after": ["7", "j", "z", "z"]
+		},
+		{
+			"before": ["K"],
+			"after": ["7", "k", "z", "z"]
+		},
+		{
+			"before": ["L"],
+			"after": ["7", "l"]
+		},
+		{
+			"before": ["H"],
+			"after": ["7", "h"]
+		},
+		// Indentation
 		{
 			"before": [">"],
 			"commands": ["editor.action.indentLines"]
@@ -132,7 +160,7 @@
 			"before": ["<"],
 			"commands": ["editor.action.outdentLines"]
 		},
-		// Commenting
+		// Commenting when in selection mode
 		{
 			"before": ["<leader>", "c", "c"],
 			"commands": ["editor.action.commentLine"]
@@ -140,7 +168,8 @@
 	],
 	"workbench.colorTheme": "Default Dark+",
 	"workbench.editorAssociations": {
-		"*.ipynb": "jupyter-notebook"
+		"*.ipynb": "jupyter-notebook",
+		"*.pdf": "default"
 	},
 	"explorer.confirmDelete": false,
 	"notebook.cellToolbarLocation": {
@@ -151,18 +180,13 @@
 	"explorer.confirmDragAndDrop": false,
 	"javascript.updateImportsOnFileMove.enabled": "always",
 	"workbench.iconTheme": "vscode-icons",
-	"bracketPairColorizer.depreciation-notice": false,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
-	"indentRainbow.includedLanguages": [], // for example ["nim", "nims", "python"]
-	// For which languages indent-rainbow should be deactivated (if empty it means none).
+	"indentRainbow.includedLanguages": [],
 	"indentRainbow.excludedLanguages": ["plaintext"],
-	// The delay in ms until the editor gets updated.
 	"indentRainbow.updateDelay": 100,
 	"[python]": {
 		"editor.defaultFormatter": "ms-python.python",
-		"python.defaultInterpreterPath": "/home/ubuntu/.local/share/virtualenvs/adams_backend-nueCwieJ/bin/python",
-		"python.pythonPath": "/home/ubuntu/.local/share/virtualenvs/adams_backend-nueCwieJ/bin/python",
 		"editor.formatOnType": true
 	},
 	"[javascript]": {
@@ -206,6 +230,7 @@
 		"iloc",
 		"iterrows",
 		"itertuples",
+		"Kanban",
 		"Langchain",
 		"mcal",
 		"modelassset",
@@ -230,6 +255,10 @@
 	"jupyter.interactiveWindow.creationMode": "single",
 	"editor.inlineSuggest.enabled": true,
 	"githubPullRequests.pullBranch": "never",
-	"remote.autoForwardPorts": false
+	"editor.cursorSmoothCaretAnimation": "on",
+	"editor.smoothScrolling": true,
+	"workbench.preferredDarkColorTheme": "Default Dark+",
+	"explorer.compactFolders": false,
+	"github.copilot.chat.welcomeMessage": "never",
+	"github.copilot.editor.enableAutoCompletions": true
 }
-

@@ -5,17 +5,6 @@
 		"command": "workbench.action.terminal.toggleTerminal",
 		"when": "terminal.active"
 	},
-	// Switching between tabs
-	{
-		"key": "shift+h",
-		"command": "workbench.action.previousEditor",
-		"when": "editorTextFocus && vim.mode != 'Insert'"
-	},
-	{
-		"key": "shift+l",
-		"command": "workbench.action.nextEditor",
-		"when": "editorTextFocus && vim.mode != 'Insert'"
-	},
 	// Jumping between group tabs
 	{
 		"key": "ctrl+h",
@@ -64,3 +53,4 @@
 		"when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus"
 	}
 ]
+

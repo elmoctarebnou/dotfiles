@@ -1,4 +1,5 @@
 -- :help options
+
 -- keymappings [view all the defaults by pressing <leader>Lk]
 vim.opt.backup = false                          -- creates a backup file
 lvim.colorscheme = "darkplus"
