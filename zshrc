@@ -29,7 +29,8 @@ export DOCKER_DEFAULT_PLATFORM=linux/amd64
 #############
 # Variables #
 #############
-ZSH_THEME="powerlevel10k/powerlevel10k" # Need to be before sourcing oh-my-zsh.sh
+# Need to be before sourcing oh-my-zsh.sh
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 ############
 # Sourcing #
@@ -60,11 +61,11 @@ alias python=python3
 alias pip=pip3
 
 
+# Requires eza to be installed
 alias ls='eza -al --color=always --group-directories-first' 
-alias ll='eza -l --color=always --group-directories-first'  # Requires eza to be installed
-alias la='eza -a --color=always --group-directories-first'  # Requires eza to be installed
-alias lt='eza -aT --color=always --group-directories-first' # Requires eza to be installed
-
+alias ll='eza -l --color=always --group-directories-first'  
+alias la='eza -a --color=always --group-directories-first'  
+alias lt='eza -aT --color=always --group-directories-first' 
 
 alias av="aws-vault"
 alias "av-management"="aws-vault exec management --duration=12h"
@@ -74,7 +75,9 @@ alias "av-test"="aws-vault exec test --duration=12h"
 alias "av-india-dev"="aws-vault exec india-development --duration=12h"
 alias "av-non-prod"="aws-vault exec non-prod --duration=12h"
 alias "av-list"="avlist"
-alias cat='bat --style=plain --paging=never' # Requires bat to be installed
+
+# Requires bat to be installed
+alias cat='bat --style=plain --paging=never' 
 alias gsb='git_search_branch'
 
 ##############
@@ -285,36 +288,12 @@ init-work() {
     # Create tmux windows
     tmux new-window -t ct -n 'logs'
     tmux new-window -t ct -n 'client' -c ~/cachetech/awm_frontend
-    tmux new-window -t ct -n 'backend' -c ~/cachetech/adams_backend
-    tmux new-window -t ct -n 'services' -c ~/cachetech/ct-services
-    tmux new-window -t ct -n 'mono' -c ~/cachetech/ct-mono
-    tmux new-window -t ct -n 'mobile' -c ~/cachetech/awa-mobile
     tmux new-window -t ct -n 'ssh'
   fi
 
 
   # Attach to the tmux session
   tmux attach -t ct
-}
-
-init-sj(){
-    if tmux has-session -t sj 2>/dev/null; then
-        echo "Tmux session 'sj' already exists. Attaching..."
-    else
-        echo "Creating new tmux session 'sj'..."
-        tmux new-session -d -s sj -n 'config'
-    
-        # Create tmux windows
-        tmux new-window -t sj -n 'logs'
-        tmux new-window -t sj -n 'client' -c ~/playground/sj/client
-        tmux new-window -t sj -n 'extension' -c ~/playground/sj/chromeExtension/
-        tmux new-window -t sj -n 'backend' -c ~/playground/sj/backend/
-        tmux new-window -t sj -n 'infra' -c ~/playground/sj/infrastructure/
-    fi
-    
-    
-    # Attach to the tmux session
-    tmux attach -t sj
 }
 
 # Tmux attach to session with fzf
