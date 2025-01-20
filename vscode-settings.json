@@ -1,4 +1,3 @@
-
 {
 	"vim.leader": "<space>",
 	"vim.easymotion": true,
@@ -40,16 +39,6 @@
 			"before": ["<leader>", "a"],
 			"commands": ["workbench.view.explorer"]
 		},
-		/* Text selection */
-		// New keybindings for selecting to the left and right
-		{
-			"before": ["<leader>", "l"], // or any other unassigned key combination
-			"commands": ["editor.action.selectToEndOfLine"]
-		},
-		{
-			"before": ["<leader>", "h"], // or any other unassigned key combination
-			"commands": ["editor.action.selectToBeginningOfLine"]
-		},
 		/* Mapping vim yanking to use vscode*/
 		{
 			"before": ["y"],
@@ -68,6 +57,15 @@
 		{
 			"before": ["<leader>", "f", "h"],
 			"commands": ["extension.git-file-history"]
+		},
+		// Text selection mappings
+		{
+			"before": ["<leader>", "s", "l"],
+			"commands": ["cursorEndSelect"]
+		},
+		{
+			"before": ["<leader>", "s", "h"],
+			"commands": ["cursorHomeSelect"]
 		}
 	],
 	"vim.normalModeKeyBindings": [
@@ -168,8 +166,10 @@
 	],
 	"workbench.colorTheme": "Default Dark+",
 	"workbench.editorAssociations": {
+		"*.copilotmd": "vscode.markdown.preview.editor",
 		"*.ipynb": "jupyter-notebook",
-		"*.pdf": "default"
+		"*.pdf": "pdf.preview",
+		"*.md": "vscode.markdown.preview.editor"
 	},
 	"explorer.confirmDelete": false,
 	"notebook.cellToolbarLocation": {
@@ -260,5 +260,12 @@
 	"workbench.preferredDarkColorTheme": "Default Dark+",
 	"explorer.compactFolders": false,
 	"github.copilot.chat.welcomeMessage": "never",
-	"github.copilot.editor.enableAutoCompletions": true
+	"github.copilot.editor.enableAutoCompletions": true,
+	"github.copilot.enable": {
+		"*": true,
+		"plaintext": false,
+		"markdown": false,
+		"scminput": false
+	}
 }
+

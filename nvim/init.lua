@@ -1,6 +1,0 @@
-require "elmoctarebnou.options"
-require "elmoctarebnou.keymaps"
-require "elmoctarebnou.plugins"
-require "elmoctarebnou.colorscheme"
-require "elmoctarebnou.cmp"
-require "elmoctarebnou.lsp"
