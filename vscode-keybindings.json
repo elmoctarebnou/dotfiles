@@ -1,56 +1,157 @@
 [
+	/************
+	 * Naviation
+	 ************/
+	// Move between windows
+	{
+		"key": "ctrl+h",
+		"command": "workbench.action.navigateLeft"
+	},
+	{
+		"key": "ctrl+l",
+		"command": "workbench.action.navigateRight"
+	},
+	{
+		"key": "ctrl+j",
+		"command": "workbench.action.navigateDown"
+	},
+	{
+		"key": "ctrl+k",
+		"command": "workbench.action.navigateUp"
+	},
+	// Move between group tabs
+	{
+		"key": "tab",
+		"command": "workbench.action.nextEditorInGroup",
+		"when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+	},
+	{
+		"key": "shift+tab",
+		"command": "workbench.action.previousEditorInGroup",
+		"when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+	},
+	/********
+	 * Coding
+	 ********/
+	// Move selected lines up and down
+	{
+		"key": "shift+ctrl+j",
+		"command": "editor.action.moveLinesDownAction",
+		"when": "vim.mode != 'Insert' && editorTextFocus"
+	},
+	{
+		"key": "shift+ctrl+k",
+		"command": "editor.action.moveLinesUpAction",
+		"when": "vim.mode != 'Insert' && editorTextFocus"
+	},
+	// File explorer
+	{
+		"key": "space e",
+		"command": "runCommands",
+		"args": {
+			"commands": [
+				"workbench.action.toggleSidebarVisibility",
+				"workbench.files.action.focusFilesExplorer"
+			]
+		},
+		"when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus) && !sideBarFocus"
+	},
+	{
+		"key": "space e",
+		"command": "runCommands",
+		"args": {
+			"commands": [
+				"workbench.action.toggleSidebarVisibility",
+				"workbench.action.focusActiveEditorGroup"
+			]
+		},
+		"when": "sideBarFocus && !inputFocus"
+	},
 	// Toggle terminal
 	{
 		"key": "ctrl+t",
 		"command": "workbench.action.terminal.toggleTerminal",
 		"when": "terminal.active"
 	},
-	// Jumping between group tabs
+	// Hover to get preview definition
 	{
-		"key": "ctrl+h",
-		"command": "workbench.action.focusLeftGroup",
-		"when": "editorTextFocus && vim.mode != 'Insert'"
+		"key": "space p d",
+		"command": "editor.action.showHover",
+		"when": "editorTextFocus && vim.mode == 'Normal'"
 	},
+	// Preview references
 	{
-		"key": "ctrl+l",
-		"command": "workbench.action.focusRightGroup",
-		"when": "editorTextFocus && vim.mode != 'Insert'"
+		"key": "space p r",
+		"command": "editor.action.goToReferences",
+		"when": "editorTextFocus && vim.mode == 'Normal'"
 	},
-	// File explorer bindings
+	// Rename a variable
 	{
-		"key": "space e",
-		"command": "workbench.action.toggleSidebarVisibility",
-		"when": "filesExplorerFocus && !inputFocus"
+		"key": "space r",
+		"command": "editor.action.rename",
+		"when": "editorTextFocus && vim.mode == 'Normal'"
 	},
+	// Search files
 	{
-		"key": "f",
-		"command": "explorer.newFile",
-		"when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+		"key": "space s d",
+		"command": "workbench.action.showAllEditors",
+		"when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
 	},
+	// Search in files with grep
 	{
-		"key": "d",
-		"command": "explorer.newFolder",
-		"when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+		"key": "space s g",
+		"command": "workbench.action.findInFiles",
+		"when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
 	},
+	// Search symbol
+	{
+		"key": "space s s",
+		"command": "workbench.action.gotoSymbol",
+		"when": "editorTextFocus && vim.mode == 'Normal'"
+	},
+	// Close tab
+	{
+		"key": "space q",
+		"command": "workbench.action.closeActiveEditor",
+		"when": "editorTextFocus && vim.mode == 'Normal'"
+	},
+	// Save tab
+	{
+		"key": "space w",
+		"command": "workbench.action.files.save",
+		"when": "editorTextFocus && vim.mode == 'Normal'"
+	},
+	/***************
+	 * File Explorer
+	 ***************/
+	// Rename file
 	{
 		"key": "r",
 		"command": "renameFile",
-		"when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+		"when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsRoot && !explorerResourceReadonly"
 	},
+	// Copy file
 	{
-		"key": "x",
-		"command": "filesExplorer.cut",
-		"when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
-	},
-	{
-		"key": "y",
+		"key": "c",
 		"command": "filesExplorer.copy",
-		"when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus"
+		"when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsRoot && !explorerResourceReadonly"
 	},
+	// Past a file
 	{
 		"key": "p",
 		"command": "filesExplorer.paste",
-		"when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus"
+		"when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsRoot && !explorerResourceReadonly"
+	},
+	// Create new fodler
+	{
+		"key": "shift-f",
+		"command": "explorer.newFolder",
+		"when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsRoot && !explorerResourceReadonly"
+	},
+	// Create new file
+	{
+		"key": "f",
+		"command": "explorer.newFile",
+		"when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsRoot && !explorerResourceReadonly"
 	}
 ]
-

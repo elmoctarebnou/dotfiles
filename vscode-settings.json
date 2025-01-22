@@ -32,10 +32,6 @@
 			"commands": ["workbench.action.splitEditor"]
 		},
 		{
-			"before": ["<leader>", "e"],
-			"commands": ["workbench.action.toggleSidebarVisibility"]
-		},
-		{
 			"before": ["<leader>", "a"],
 			"commands": ["workbench.view.explorer"]
 		},
@@ -57,97 +53,44 @@
 		{
 			"before": ["<leader>", "f", "h"],
 			"commands": ["extension.git-file-history"]
-		},
-		// Text selection mappings
-		{
-			"before": ["<leader>", "s", "l"],
-			"commands": ["cursorEndSelect"]
-		},
-		{
-			"before": ["<leader>", "s", "h"],
-			"commands": ["cursorHomeSelect"]
 		}
 	],
 	"vim.normalModeKeyBindings": [
-		{
-			"before": ["<leader>", "l"],
-			"commands": ["workbench.action.nextEditor"],
-			"when": "!vim.activeVisualMode"
-		},
-		{
-			"before": ["<leader>", "h"],
-			"commands": ["workbench.action.previousEditor"],
-			"when": "!vim.activeVisualMode"
-		},
-		/********************/
-		/* Search bindings */
-		/********************/
-		{
-			"before": ["<leader>", "s", "r"],
-			"commands": ["editor.action.referenceSearch.trigger"]
-		},
-		{
-			"before": ["<leader>", "s", "d"],
-			"commands": ["workbench.action.quickOpen"]
-		},
-		{
-			"before": ["<leader>", "s", "t"],
-			"commands": ["workbench.action.findInFiles"]
-		},
-		// Definition mappings
-		{
-			"before": ["<leader>", "i"],
-			"commands": ["editor.action.showDefinitionPreviewHover"]
-		},
-		{
-			"before": ["<leader>", "p", "d"],
-			"commands": ["editor.action.previewDeclaration"]
-		},
-		// Commenting when in normal mode
-		{
-			"before": ["<leader>", "c", "c"],
-			"commands": ["editor.action.commentLine"]
-		},
 		// Fast movement
 		{
 			"before": ["J"],
-			"after": ["7", "j", "z", "z"]
+			"after": ["8", "j", "z", "z"]
 		},
 		{
 			"before": ["K"],
-			"after": ["7", "k", "z", "z"]
+			"after": ["8", "k", "z", "z"]
 		},
 		{
 			"before": ["L"],
-			"after": ["7", "l"]
+			"after": ["8", "l"]
 		},
 		{
 			"before": ["H"],
-			"after": ["7", "h"]
+			"after": ["8", "h"]
 		}
 	],
 	"vim.visualModeKeyBindings": [
-		// Google search highlighted text
-		{
-			"before": ["<leader>", "s", "g"],
-			"commands": ["extension.googleSearch"]
-		},
 		// Fast selection
 		{
 			"before": ["J"],
-			"after": ["7", "j", "z", "z"]
+			"after": ["8", "j", "z", "z"]
 		},
 		{
 			"before": ["K"],
-			"after": ["7", "k", "z", "z"]
+			"after": ["8", "k", "z", "z"]
 		},
 		{
 			"before": ["L"],
-			"after": ["7", "l"]
+			"after": ["8", "l"]
 		},
 		{
 			"before": ["H"],
-			"after": ["7", "h"]
+			"after": ["8", "h"]
 		},
 		// Indentation
 		{
@@ -158,7 +101,6 @@
 			"before": ["<"],
 			"commands": ["editor.action.outdentLines"]
 		},
-		// Commenting when in selection mode
 		{
 			"before": ["<leader>", "c", "c"],
 			"commands": ["editor.action.commentLine"]
@@ -268,4 +210,3 @@
 		"scminput": false
 	}
 }
-
