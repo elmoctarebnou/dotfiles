@@ -1,157 +1,195 @@
 [
-	/************
-	 * Naviation
-	 ************/
-	// Move between windows
-	{
-		"key": "ctrl+h",
-		"command": "workbench.action.navigateLeft"
-	},
-	{
-		"key": "ctrl+l",
-		"command": "workbench.action.navigateRight"
-	},
-	{
-		"key": "ctrl+j",
-		"command": "workbench.action.navigateDown"
-	},
-	{
-		"key": "ctrl+k",
-		"command": "workbench.action.navigateUp"
-	},
-	// Move between group tabs
-	{
-		"key": "tab",
-		"command": "workbench.action.nextEditorInGroup",
-		"when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
-	},
-	{
-		"key": "shift+tab",
-		"command": "workbench.action.previousEditorInGroup",
-		"when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
-	},
-	/********
-	 * Coding
-	 ********/
-	// Move selected lines up and down
-	{
-		"key": "shift+ctrl+j",
-		"command": "editor.action.moveLinesDownAction",
-		"when": "vim.mode != 'Insert' && editorTextFocus"
-	},
-	{
-		"key": "shift+ctrl+k",
-		"command": "editor.action.moveLinesUpAction",
-		"when": "vim.mode != 'Insert' && editorTextFocus"
-	},
-	// File explorer
-	{
-		"key": "space e",
-		"command": "runCommands",
-		"args": {
-			"commands": [
-				"workbench.action.toggleSidebarVisibility",
-				"workbench.files.action.focusFilesExplorer"
-			]
-		},
-		"when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus) && !sideBarFocus"
-	},
-	{
-		"key": "space e",
-		"command": "runCommands",
-		"args": {
-			"commands": [
-				"workbench.action.toggleSidebarVisibility",
-				"workbench.action.focusActiveEditorGroup"
-			]
-		},
-		"when": "sideBarFocus && !inputFocus"
-	},
-	// Toggle terminal
-	{
-		"key": "ctrl+t",
-		"command": "workbench.action.terminal.toggleTerminal",
-		"when": "terminal.active"
-	},
-	// Hover to get preview definition
-	{
-		"key": "space p d",
-		"command": "editor.action.showHover",
-		"when": "editorTextFocus && vim.mode == 'Normal'"
-	},
-	// Preview references
-	{
-		"key": "space p r",
-		"command": "editor.action.goToReferences",
-		"when": "editorTextFocus && vim.mode == 'Normal'"
-	},
-	// Rename a variable
-	{
-		"key": "space r",
-		"command": "editor.action.rename",
-		"when": "editorTextFocus && vim.mode == 'Normal'"
-	},
-	// Search files
-	{
-		"key": "space s d",
-		"command": "workbench.action.showAllEditors",
-		"when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
-	},
-	// Search in files with grep
-	{
-		"key": "space s g",
-		"command": "workbench.action.findInFiles",
-		"when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
-	},
-	// Search symbol
-	{
-		"key": "space s s",
-		"command": "workbench.action.gotoSymbol",
-		"when": "editorTextFocus && vim.mode == 'Normal'"
-	},
-	// Close tab
-	{
-		"key": "space q",
-		"command": "workbench.action.closeActiveEditor",
-		"when": "editorTextFocus && vim.mode == 'Normal'"
-	},
-	// Save tab
-	{
-		"key": "space w",
-		"command": "workbench.action.files.save",
-		"when": "editorTextFocus && vim.mode == 'Normal'"
-	},
-	/***************
-	 * File Explorer
-	 ***************/
-	// Rename file
-	{
-		"key": "r",
-		"command": "renameFile",
-		"when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsRoot && !explorerResourceReadonly"
-	},
-	// Copy file
-	{
-		"key": "c",
-		"command": "filesExplorer.copy",
-		"when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsRoot && !explorerResourceReadonly"
-	},
-	// Past a file
-	{
-		"key": "p",
-		"command": "filesExplorer.paste",
-		"when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsRoot && !explorerResourceReadonly"
-	},
-	// Create new fodler
-	{
-		"key": "shift-f",
-		"command": "explorer.newFolder",
-		"when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsRoot && !explorerResourceReadonly"
-	},
-	// Create new file
-	{
-		"key": "f",
-		"command": "explorer.newFile",
-		"when": "filesExplorerFocus && foldersViewVisible && !explorerResourceIsRoot && !explorerResourceReadonly"
-	}
+    /************
+    * Naviation
+    ************/
+    // Move between windows
+    {
+        "key": "ctrl+h",
+        "command": "workbench.action.navigateLeft"
+    },
+    {
+        "key": "ctrl+l",
+        "command": "workbench.action.navigateRight"
+    },
+    {
+        "key": "ctrl+j",
+        "command": "workbench.action.navigateDown"
+    },
+    {
+        "key": "ctrl+k",
+        "command": "workbench.action.navigateUp"
+    },
+    // Move between group tabs
+    {
+        "key": "tab",
+        "command": "workbench.action.nextEditorInGroup",
+        "when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+    },
+    {
+        "key": "shift+tab",
+        "command": "workbench.action.previousEditorInGroup",
+        "when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+    },
+    /********
+    * Coding
+    ********/
+    // Move selected lines up and down
+    {
+        "key": "shift+ctrl+j",
+        "command": "editor.action.moveLinesDownAction",
+        "when": "vim.mode != 'Insert' && editorTextFocus"
+    },
+    {
+        "key": "shift+ctrl+k",
+        "command": "editor.action.moveLinesUpAction",
+        "when": "vim.mode != 'Insert' && editorTextFocus"
+    },
+    // File explorer
+    {
+        "key": "ctrl+e",
+        "command": "runCommands",
+        "args": {
+            "commands": [
+                "workbench.action.toggleSidebarVisibility",
+                "workbench.files.action.focusFilesExplorer"
+            ]
+        },
+        "when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus) && !sideBarFocus"
+    },
+    {
+        "key": "ctrl+e",
+        "command": "runCommands",
+        "args": {
+            "commands": [
+                "workbench.action.toggleSidebarVisibility",
+                "workbench.action.focusActiveEditorGroup"
+            ]
+        },
+        "when": "sideBarFocus && !inputFocus"
+    },
+    // Toggle terminal
+    {
+        "key": "ctrl+t",
+        "command": "workbench.action.terminal.toggleTerminal",
+        "when": "terminal.active"
+    },
+    // Hover to get preview definition
+    {
+        "key": "space p d",
+        "command": "editor.action.showHover",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    // Preview references
+    {
+        "key": "space p r",
+        "command": "editor.action.goToReferences",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    // Rename a variable
+    {
+        "key": "space r n",
+        "command": "editor.action.rename",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    // Search files
+    {
+        "key": "space s d",
+        "command": "workbench.action.quickOpen",
+        "when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
+    },
+    // Search in files with grep
+    {
+        "key": "space s g",
+        "command": "workbench.action.findInFiles",
+        "when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
+    },
+    // Search symbol
+    {
+        "key": "space s s",
+        "command": "workbench.action.gotoSymbol",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    // Search references
+    {
+        "key": "space s r",
+        "command": "editor.action.referenceSearch.trigger",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    // Close tab
+    {
+        "key": "space q",
+        "command": "workbench.action.closeActiveEditor",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    // Save tab
+    {
+        "key": "space w",
+        "command": "workbench.action.files.save",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    // Run Java application
+    {
+        "key": "space r a",
+        "command": "java.debug.runJavaFile",
+        "when": "editorTextFocus && vim.mode == 'Normal' && editorLangId == 'java'"
+    },
+    /***************
+    * Markdown Preview Enhanced
+    ***************/
+    // Open markdown preview to the side
+    {
+        "key": "space m p",
+        "command": "markdown-preview-enhanced.openPreviewToTheSide",
+        "when": "editorTextFocus && vim.mode == 'Normal' && editorLangId =~ /^markdown$|^rmd$/"
+    },
+    // Open markdown preview
+    {
+        "key": "space m v",
+        "command": "markdown-preview-enhanced.openPreview",
+        "when": "editorTextFocus && vim.mode == 'Normal' && editorLangId =~ /^markdown$|^rmd$/"
+    },
+    // Sync markdown preview/source
+    {
+        "key": "space m s",
+        "command": "markdown-preview-enhanced.syncPreview",
+        "when": "editorTextFocus && vim.mode == 'Normal' && editorLangId =~ /^markdown$|^rmd$/"
+    },
+    // Fold all methods
+    {
+        "key": "space f l",
+        "command": "editor.fold",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space f 1",
+        "command": "editor.foldLevel1",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space f 2",
+        "command": "editor.foldLevel2",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space f 3",
+        "command": "editor.foldLevel3",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    {
+        "key": "space f 4",
+        "command": "editor.foldLevel4",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    // Unfold all methods
+    {
+        "key": "space f 0",
+        "command": "editor.unfoldAll",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    },
+    // Switch VSCode windows
+    {
+        "key": "space s w",
+        "command": "workbench.action.switchWindow",
+        "when": "editorTextFocus && vim.mode == 'Normal'"
+    }
 ]
