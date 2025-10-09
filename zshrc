@@ -356,6 +356,71 @@ weather() {
     curl -s "wttr.in/$1?m"
 }
 
+treemd() {
+  # POSIX-sh: write a Markdown nested list of your directory tree
+  # Usage: treemd [-o OUTPUT|-] [-i "dir1 dir2 ..."] [DIR]
+  #   -o  output file (default: tree.md). Use "-" to write to stdout.
+  #   -i  space-separated names to ignore (default below or $TREEMD_IGNORE)
+  out="tree.md"
+  dir="."
+  ignore_default="build node_modules .git dist target .next out coverage venv .venv tests test test-common"
+  ignore="${TREEMD_IGNORE:-$ignore_default}"
+
+  while getopts "o:i:h" opt; do
+    case "$opt" in
+      o) out="$OPTARG" ;;
+      i) ignore="$OPTARG" ;;
+      h)
+        printf "Usage: treemd [-o OUTPUT|-] [-i \"dir1 dir2 ...\"] [DIR]\n"
+        return 0
+        ;;
+    esac
+  done
+  shift $((OPTIND-1))
+  [ $# -gt 0 ] && dir="$1"
+
+  command -v tree >/dev/null 2>&1 || { printf "treemd: 'tree' is not installed.\n" >&2; return 127; }
+
+  # Build ignore pattern: name1|name2|...
+  pattern=$(printf "%s" "$ignore" | awk '{for(i=1;i<=NF;i++){gsub(/\|/,"\\|",$i);printf "%s%s",(i>1?"|":""),$i}}')
+
+  generate() {
+    printf '## Directory tree for `%s`\n\n' "$dir"
+    # Convert tree to Markdown bullets:
+    tree -I "$pattern" -F --noreport "$dir" | awk '
+      BEGIN { OFS=""; }
+      NR==1 { print "- ", $0; next }  # root line
+      {
+        line=$0
+        gsub(/\t/, "    ", line)              # tabs -> 4 spaces
+        # Find branch token (Unicode or ASCII variants)
+        pos = index(line, "├── "); if (!pos) pos = index(line, "└── ")
+        if (!pos) pos = index(line, "|-- ");  if (!pos) pos = index(line, "`-- ")
+        if (!pos) next
+
+        indent_str = substr(line, 1, pos-1)
+        gsub(/[^ ]/, " ", indent_str)         # make visible guides into spaces
+        depth = int(length(indent_str) / 4)   # 4-space “cells” from tree
+
+        rest = substr(line, pos)
+        gsub(/├── |└── |\|-- |`-- /, "- ", rest)
+
+        indent=""
+        for (i=0; i<depth; i++) indent = indent "  "   # 2 spaces per level
+        print indent, rest
+      }'
+    printf '\n'
+  }
+
+  if [ "$out" = "-" ]; then
+    generate
+  else
+    tmp="${out}.tmp.$$"
+    generate >"$tmp" && mv "$tmp" "$out"
+    printf "Wrote Markdown list to %s (ignored: %s)\n" "$out" "$pattern"
+  fi
+}
+
 ###################
 # Command History #
 ###################
