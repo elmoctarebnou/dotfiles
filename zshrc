@@ -91,7 +91,6 @@ gcmt() {
     git commit -m "$*"
   fi
 }
-
 # Git add and commit with message
 gac() {
   git add .
@@ -113,147 +112,217 @@ gcout() {
   fi
 }
 
-# Git search branches without checking out
 git_search_branch() {
-  if ! command -v fzf &> /dev/null; then
-    echo "fzf is not installed. Please install it first."
-    return 1
+  # deps
+  command -v fzf >/dev/null 2>&1 || { echo "fzf is not installed."; return 1; }
+  git rev-parse --git-dir >/dev/null 2>&1 || { echo "Not a git repository."; return 1; }
+
+  local sel branch
+
+  sel=$(
+    # list local + remote branches; drop the remotes/*/HEAD ref
+    git for-each-ref --format='%(refname:short)' refs/heads refs/remotes \
+      | grep -v '/HEAD$' \
+      | sort -u \
+      | fzf --height=40% --layout=reverse --border --ansi \
+            --prompt="Select a branch: " \
+            --preview '
+              p={}
+              printf "Commits on %s\n\n" "$p"
+
+              # Resolve to a concrete ref that git log will accept
+              if git show-ref --verify --quiet "refs/heads/$p"; then
+                ref="refs/heads/$p"
+              elif git show-ref --verify --quiet "refs/remotes/$p"; then
+                ref="refs/remotes/$p"
+              elif git show-ref --verify --quiet "refs/remotes/origin/$p"; then
+                ref="refs/remotes/origin/$p"
+              else
+                echo "Branch not found locally or remotely."
+                exit 0
+              fi
+
+              git log --oneline --graph --decorate --color=always -n 20 "$ref" --
+            ' \
+            --preview-window=up,60%,wrap
+  ) || return
+
+  [[ -z $sel ]] && { echo "No branch selected."; return 0; }
+
+  # normalize and switch
+  branch=${sel#remotes/}  # turn remotes/origin/foo -> origin/foo
+
+  if git show-ref --verify --quiet "refs/heads/$branch"; then
+    git switch "$branch" && echo "Switched to: $branch" && return
   fi
-  branch=$(git branch --format='%(refname:short)' | fzf --height 40% --border --prompt="Select a branch: ")
-  if [[ -n $branch ]]; then
-    echo "Branch selected: $branch"
-  else
-    echo "No branch selected."
+
+  # origin/foo → create tracking branch "foo"
+  if [[ $branch == origin/* ]]; then
+    local local_name=${branch#origin/}
+    git switch -c "$local_name" --track "origin/$local_name" \
+      && echo "Created and switched to: $local_name (tracking origin/$local_name)" \
+      || return 1
+    return
   fi
+
+  # other remote like upstream/foo
+  if [[ $branch == */* ]]; then
+    local remote=${branch%%/*} name=${branch#*/}
+    git switch -c "$name" --track "$remote/$name" \
+      && echo "Created and switched to: $name (tracking $remote/$name)" \
+      || return 1
+    return
+  fi
+
+  # last try (unusual refnames)
+  git switch "$branch" && echo "Switched to: $branch"
 }
 
-# Git revert with fzf (improved with automatic parent selection for merge commits)
-grevert() {
-  echo "Selecting a commit to revert..."
-  if ! command -v fzf &> /dev/null; then
-    echo "fzf is not installed. Please install it first."
+set-region() {
+  if ! command -v fzf >/dev/null 2>&1; then
+    echo "fzf not found. Please install fzf first."
     return 1
   fi
-  
-  # Get the current branch
-  current_branch=$(git rev-parse --abbrev-ref HEAD)
-  
-  # Use fzf to select a commit
-  selected=$(git log --oneline --format="%h %p %s" |
-             fzf --height 40% --border --prompt="Select a commit to revert: " --preview "echo {} | cut -d' ' -f1 | xargs -I% git show --color=always % | head -n 50")
-  
+
+  local regions="
+US East (Ohio)                us-east-2
+US East (N. Virginia)         us-east-1
+US West (N. California)       us-west-1
+US West (Oregon)              us-west-2
+Africa (Cape Town)            af-south-1
+Asia Pacific (Hong Kong)      ap-east-1
+Asia Pacific (Hyderabad)      ap-south-2
+Asia Pacific (Jakarta)        ap-southeast-3
+Asia Pacific (Malaysia)       ap-southeast-5
+Asia Pacific (Melbourne)      ap-southeast-4
+Asia Pacific (Mumbai)         ap-south-1
+Asia Pacific (Osaka)          ap-northeast-3
+Asia Pacific (Seoul)          ap-northeast-2
+Asia Pacific (Singapore)      ap-southeast-1
+Asia Pacific (Sydney)         ap-southeast-2
+Asia Pacific (Taipei)         ap-east-2
+Asia Pacific (Thailand)       ap-southeast-7
+Asia Pacific (Tokyo)          ap-northeast-1
+Canada (Central)              ca-central-1
+Canada West (Calgary)         ca-west-1
+Europe (Frankfurt)            eu-central-1
+Europe (Ireland)              eu-west-1
+Europe (London)               eu-west-2
+Europe (Milan)                eu-south-1
+Europe (Paris)                eu-west-3
+Europe (Spain)                eu-south-2
+Europe (Stockholm)            eu-north-1
+Europe (Zurich)               eu-central-2
+Israel (Tel Aviv)             il-central-1
+Mexico (Central)              mx-central-1
+Middle East (Bahrain)         me-south-1
+Middle East (UAE)             me-central-1
+South America (São Paulo)     sa-east-1
+AWS GovCloud (US-East)        us-gov-east-1
+AWS GovCloud (US-West)        us-gov-west-1
+"
+
+  # fzf selection
+  local selection
+  selection=$(echo "$regions" | fzf --prompt="Select AWS region > " --height=60% --reverse --border)
+
+  # If nothing selected, exit
+  [ -z "$selection" ] && return 1
+
+  # Extract the region code (last column)
+  local region_code
+  region_code=$(echo "$selection" | awk '{print $NF}')
+
+  export AWS_DEFAULT_REGION="$region_code"
+  export AWS_REGION="$region_code"
+
+  echo "✅ AWS region set to: $region_code"
+}
+
+
+fzf-command-history() {
+  local selected
+  selected=$(
+    # list history newest→oldest, no numbers
+    fc -l -n -r 1 |
+    # de-duplicate, keeping the first (most recent) occurrence
+    awk '!seen[$0]++' |
+    # fuzzy-pick
+    fzf -e +s --tiebreak=index --preview 'echo {}' --preview-window=up:1:wrap
+  )
   if [[ -n $selected ]]; then
-    # Extract the commit hash, parent hashes, and commit message
-    commit_hash=$(echo $selected | cut -d' ' -f1)
-    parent_hashes=(${(z)$(echo $selected | cut -d' ' -f2- | cut -d' ' -f1-2)})
-    commit_message=$(echo $selected | cut -d' ' -f4-)
-    
-    # Ask for confirmation
-    echo "You are about to revert this commit:"
-    echo "$selected"
-    echo "on branch: $current_branch"
-    
-    # Handle merge commits
-    if [[ ${#parent_hashes} -gt 1 ]]; then
-      echo "This is a merge commit. Automatically selecting the first parent (main line of development)."
-      parent_number=1
-      revert_command="git revert --no-edit -m $parent_number $commit_hash"
-    else
-      revert_command="git revert --no-edit $commit_hash"
-    fi
-    
-    # Generate automatic commit message
-    auto_message="Revert \"$commit_message\"\n\nThis reverts commit $commit_hash."
-    if [[ ${#parent_hashes} -gt 1 ]]; then
-      auto_message+="\nAutomatically reverted to parent ${parent_number} (${parent_hashes[$parent_number]})."
-    fi
-    
-    echo "Revert command: $revert_command"
-    echo "Automatic commit message:"
-    echo -e "$auto_message"
-    echo -n "Do you want to proceed? [y/N] "
-    read response
-    
-    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
-      # Perform the revert
-      echo -e "$auto_message" | eval $revert_command
-      if [[ $? -eq 0 ]]; then
-        echo "Commit reverted successfully."
-      else
-        echo "Revert failed. Please check the output above for details."
-      fi
-    else
-      echo "Revert cancelled."
-    fi
-  else
-    echo "No commit selected."
+    LBUFFER="$selected"
   fi
+  zle redisplay
 }
 
-gitclean() {
-  echo "Selecting branches to delete..."
-  if ! command -v fzf &> /dev/null; then
-    echo "fzf is not installed. Please install it first."
-    return 1
+
+sd() {
+  local pick depth_flags
+
+  # Parse flags: only -a is supported for now
+  if [[ "$1" == "-a" ]]; then
+    depth_flags=(-mindepth 1)            # recursive (show everything)
+    shift
+  else
+    depth_flags=(-mindepth 1 -maxdepth 1)  # level 1 only
   fi
 
-  # Get current branch
-  current_branch=$(git rev-parse --abbrev-ref HEAD)
-  
-  # List all branches except the current one and main/master
-  branches=$(git branch --format='%(refname:short)' | grep -vE "^(main|master|$current_branch)$" | 
-             fzf --multi --height 40% --border --prompt="Select branches to delete (TAB to multi-select): " --preview "git log --color=always {} -n 50")
-  
-  if [[ -n $branches ]]; then
-    echo "You're about to delete these branches:"
-    echo "$branches"
-    echo -n "Are you sure you want to proceed? [y/N] "
-    read response
-    
-    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
-      echo "$branches" | while read branch; do
-        if git branch -D "$branch"; then
-          echo "Deleted branch: $branch"
+  pick=$(
+    # Build the candidate list
+    find . "${depth_flags[@]}" \
+      \( -path '*/.*' -type d -o -path '*/node_modules' -o -path '*/build' -o -name '.*' -type f \) -prune -o \
+      -print0 |
+    FZF_DEFAULT_OPTS="" fzf --read0 --height=80% --layout=reverse --border \
+      --preview '
+        # IMPORTANT: {} is already shell-escaped; don’t wrap it in quotes.
+        p={}
+        printf "→ %s\n\n" "$p"
+
+        if [ -d "$p" ]; then
+          if command -v eza >/dev/null 2>&1; then
+            eza -la --group-directories-first "$p" 2>/dev/null || ls -la "$p" 2>/dev/null
+          else
+            ls -la "$p" 2>/dev/null
+          fi
+        elif [ -f "$p" ] || [ -L "$p" ]; then
+          if [ ! -r "$p" ]; then
+            echo "(unreadable)"; exit 0
+          fi
+          if command -v bat >/dev/null 2>&1; then
+            bat --paging=never --style=numbers --color=always --line-range=:200 "$p" 2>/dev/null \
+            || head -n 200 "$p" 2>/dev/null || cat "$p" 2>/dev/null
+          else
+            head -n 200 "$p" 2>/dev/null || cat "$p" 2>/dev/null
+          fi
         else
-          echo "Failed to delete branch: $branch"
+          # Helpful diagnostics if it’s something special
+          ls -ld "$p" 2>/dev/null || true
+          command -v file >/dev/null 2>&1 && file "$p" 2>/dev/null || echo "(unknown type)"
         fi
-      done
-    else
-      echo "Branch cleanup cancelled."
-    fi
-  else
-    echo "No branches selected."
-  fi}
-# AWS VAULT List of Profiles
-function avlist() {
-  echo "av-management"
-  echo "av-dev"
-  echo "av-prod"
-  echo "av-test"
-  echo "av-india-dev"
-  echo "av-non-prod"
-}
+      ' \
+      --preview-window=up,60%,wrap
+  ) || return
 
-# Fuzzy Finder for Files
-function sd() {
-  local dir="${1:-.}"
-  local file
-  file=$(fd --type f --type d --hidden --follow --exclude .git 2>/dev/null | fzf --height 60% --border --preview 'bat --style=numbers --color=always {} 2>/dev/null || ls -alh {}')
-  if [[ -n $file ]]; then
-    if [[ -f $file ]]; then
-      ${EDITOR:-lvim} "$file"
-    else
-      cd "$file" || return
-    fi
+  [[ -z $pick ]] && return
+  if [[ -d $pick ]]; then
+    cd -- "$pick"
   else
-    echo "No file selected."
+    "${EDITOR:-vim}" -- "$pick"
   fi
 }
 
 # Fuzzy Finder for Directories
 fzf-command-history() {
   local selected
-  selected=$(history -n 1 | fzf --tac +s --tiebreak=index --preview="echo {}" --preview-window=up:1:wrap)
+  selected=$(
+    # list history newest→oldest, no numbers
+    fc -l -n -r 1 |
+    # de-duplicate, keeping the first (most recent) occurrence
+    awk '!seen[$0]++' |
+    # fuzzy-pick
+    fzf -e +s --tiebreak=index --preview 'echo {}' --preview-window=up:1:wrap
+  )
   if [[ -n $selected ]]; then
     LBUFFER="$selected"
   fi
@@ -287,7 +356,7 @@ init-work() {
 
     # Create tmux windows
     tmux new-window -t ct -n 'logs'
-    tmux new-window -t ct -n 'client' -c ~/cachetech/awm_frontend
+    tmux new-window -t ct -n 'client' -c ~/PATH_TO_PACKAGE
     tmux new-window -t ct -n 'ssh'
   fi
 
@@ -304,9 +373,33 @@ tat() {
   fi
 }
 
-# Close all vscode instances
-close-vscode() {
-  pkill -f "Visual Studio Code"
+
+create_windows() {
+  local session="$1"; shift
+  local panes=("$@")
+
+  for entry in "${panes[@]}"; do
+    local name="${entry%%:*}"
+    local dir="${entry#*:}"
+
+    if ! tmux list-windows -t "$session" | grep -q "^${name}"; then
+      tmux new-window -t "$session" -n "$name" -c "$dir"
+    fi
+  done
+}
+
+init-work() {
+  if ! tmux has-session -t work 2>/dev/null; then
+    tmux new-session -d -s work -n 'logs' -c ~/logs 
+  fi
+
+  local panes=(
+    "PACKAGE_NAME:/PATH_TO_FOLDER"
+  )
+
+  create_windows work "${panes[@]}"
+
+  tmux attach -t work
 }
 
 # Extract various compressed file types
