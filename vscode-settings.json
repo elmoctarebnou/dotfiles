@@ -38,114 +38,100 @@
     "[brazilPackageConfig]": {
 "workbench.editor.languageDetection": false
 },
-"vim.leader": "<space>",
-"vim.easymotion": true,
-"vim.incsearch": true,
-"vim.useSystemClipboard": true,
-"vim.useCtrlKeys": false,
-"vim.hlsearch": true,
-"vim.handleKeys": {
-"<C-a>": false,
-"<C-f>": false,
-"<C-p>": false,
-"<C-c>": false,
-"<C-v>": false,
-"<C-k>": false
-},
-"vim.insertModeKeyBindings": [
-{
-"before": ["j", "j"],
-"after": ["<Esc>"]
-}
-],
-"vim.normalModeKeyBindingsNonRecursive": [
-// File save and quit
-{ "before": ["<leader>", "w"], "commands": [":w!"] },
-{ "before": ["<leader>", "q"], "commands": [":q!"] },
-{
-"before": ["<Leader>", "/"],
-"commands": [":noh"]
-},
-// Navigation
-{
-"before": ["<leader>", "vs"],
-"commands": ["workbench.action.splitEditor"]
-},
-{
-"before": ["<leader>", "a"],
-"commands": ["workbench.view.explorer"]
-},
-/* Mapping vim yanking to use vscode*/
-{
-"before": ["y"],
-"commands": ["editor.action.clipboardCopyAction"],
-"when": "textInputFocus"
-},
-{
-"before": ["p"],
-"commands": ["editor.action.clipboardPasteAction"],
-"when": "textInputFocus && !editorReadonly"
-},
-{
-"before": ["<leader>", "p"],
-"commands": ["workbench.action.showCommands"]
-},
-{
-"before": ["<leader>", "f", "h"],
-"commands": ["extension.git-file-history"]
-}
-],
-"vim.normalModeKeyBindings": [
-// Fast movement
-{
-"before": ["J"],
-"after": ["8", "j", "z", "z"]
-},
-{
-"before": ["K"],
-"after": ["8", "k", "z", "z"]
-},
-{
-"before": ["L"],
-"after": ["8", "l"]
-},
-{
-"before": ["H"],
-"after": ["8", "h"]
-}
-],
-"vim.visualModeKeyBindings": [
-// Fast selection
-{
-"before": ["J"],
-"after": ["8", "j", "z", "z"]
-},
-{
-"before": ["K"],
-"after": ["8", "k", "z", "z"]
-},
-{
-"before": ["L"],
-"after": ["8", "l"]
-},
-{
-"before": ["H"],
-"after": ["8", "h"]
-},
-// Indentation
-{
-"before": [">"],
-"commands": ["editor.action.indentLines"]
-},
-{
-"before": ["<"],
-"commands": ["editor.action.outdentLines"]
-},
-{
-"before": ["<leader>", "c", "c"],
-"commands": ["editor.action.commentLine"]
-},
-],
+	"vim.insertModeKeyBindings": [
+		{
+			"before": ["j", "j"],
+			"after": ["<Esc>"]
+		}
+	],
+	"vim.normalModeKeyBindingsNonRecursive": [
+		// File save and quit
+		{ "before": ["<leader>", "w"], "commands": [":w!"] },
+		{ "before": ["<leader>", "q"], "commands": [":q!"] },
+		{
+			"before": ["<Leader>", "/"],
+			"commands": [":noh"]
+		},
+		// Navigation
+		{
+			"before": ["<leader>", "vs"],
+			"commands": ["workbench.action.splitEditor"]
+		},
+		{
+			"before": ["<leader>", "a"],
+			"commands": ["workbench.view.explorer"]
+		},
+		/* Mapping vim yanking to use vscode*/
+		{
+			"before": ["y"],
+			"commands": ["editor.action.clipboardCopyAction"],
+			"when": "textInputFocus"
+		},
+		{
+			"before": ["p"],
+			"commands": ["editor.action.clipboardPasteAction"],
+			"when": "textInputFocus && !editorReadonly"
+		},
+		{
+			"before": ["<leader>", "p"],
+			"commands": ["workbench.action.showCommands"]
+		},
+		{
+			"before": ["<leader>", "f", "h"],
+			"commands": ["extension.git-file-history"]
+		}
+	],
+	"vim.normalModeKeyBindings": [
+		// Fast movement
+		{
+			"before": ["J"],
+			"after": ["8", "j", "z", "z"]
+		},
+		{
+			"before": ["K"],
+			"after": ["8", "k", "z", "z"]
+		},
+		{
+			"before": ["L"],
+			"after": ["8", "l"]
+		},
+		{
+			"before": ["H"],
+			"after": ["8", "h"]
+		}
+	],
+	"vim.visualModeKeyBindings": [
+		// Fast selection
+		{
+			"before": ["J"],
+			"after": ["8", "j", "z", "z"]
+		},
+		{
+			"before": ["K"],
+			"after": ["8", "k", "z", "z"]
+		},
+		{
+			"before": ["L"],
+			"after": ["8", "l"]
+		},
+		{
+			"before": ["H"],
+			"after": ["8", "h"]
+		},
+		// Indentation
+		{
+			"before": [">"],
+			"commands": ["editor.action.indentLines"]
+		},
+		{
+			"before": ["<"],
+			"commands": ["editor.action.outdentLines"]
+		},
+		{
+			"before": ["<leader>", "c", "c"],
+			"commands": ["editor.action.commentLine"]
+		},
+	],
 "extensions.experimental.affinity": {
  "vscodevim.vim": 1
 },
